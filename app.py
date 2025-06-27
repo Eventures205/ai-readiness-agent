@@ -7,14 +7,10 @@ from PIL import Image
 
 st.set_page_config(page_title="AI Readiness Assessment", layout="centered")
 
-# Load and display the Capital E Ventures logo
-logo = Image.open("streamlit_logo_large.png")
-st.image(logo, width=200)  # Adjust width as needed
-# Center the logo and company name using HTML
 st.markdown(
     """
     <div style='text-align: center;'>
-        <img src='https://raw.githubusercontent.com/Eventures205/ai-readiness-agent/main/streamlit_logo_large.png' width='300'/>
+        <img src='https://raw.githubusercontent.com/Eventures205/ai-readiness-agent/main/streamlit_logo_large.png' width='200'/>
         <h2 style='color: white; font-weight: bold;'>CAPITAL E VENTURES</h2>
     </div>
     """,
