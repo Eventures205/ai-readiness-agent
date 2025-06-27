@@ -1,8 +1,16 @@
 import streamlit as st
 import requests
 import json
+from PIL import Image
+
+
 
 st.set_page_config(page_title="AI Readiness Assessment", layout="centered")
+
+# Load and display the Capital E Ventures logo
+logo = Image.open("streamlit_logo_large.png")
+st.image(logo, width=300)  # Adjust width as needed
+st.markdown("<h2 style='text-align: center;'>CAPITAL E VENTURES</h2>", unsafe_allow_html=True)
 
 st.title("🧠 AI Readiness Assessment")
 st.write("Answer a few quick questions to see how ready your organization is to scale AI.")
