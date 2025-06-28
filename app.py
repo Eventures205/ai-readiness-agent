@@ -85,7 +85,8 @@ if submitted:
         }
 
         try:
-            response = requests.post(api_url, json={"body": json.dumps(payload)})
+            response = requests.post(api_url, json=payload)
+
             if response.status_code == 200:
                 result = response.json()
                 scores = result.get("scores", {})
