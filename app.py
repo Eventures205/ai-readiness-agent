@@ -54,10 +54,8 @@ if submitted:
         client_id = str(uuid.uuid4())
         timestamp = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S")
 
-        payload = {
-            "client_id": client_id,
-            "company": company,
-            "timestamp": timestamp,
+        # Group all inputs into one dictionary
+        inputs = {
             "has_data_catalog": has_data_catalog,
             "quality_automation": quality_automation,
             "integrated_sources": integrated_sources,
@@ -78,6 +76,13 @@ if submitted:
             "cross_functional_teams": cross_functional_teams,
             "training_programs": training_programs,
             "ai_champion": ai_champion
+        }
+
+        payload = {
+            "client_id": client_id,
+            "company_name": company,  # This is the FIX
+            "timestamp": timestamp,
+            "inputs": inputs
         }
 
         try:
