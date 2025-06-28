@@ -1,100 +1,105 @@
 import streamlit as st
 import requests
+import json
+import uuid
 from datetime import datetime
 
 st.set_page_config(page_title="AI Readiness Assessment", layout="centered")
 
 st.image("logo.png", width=300)
-st.title("AI Readiness Assessment")
+st.markdown("<h3 style='text-align: center;'>Capital E Ventures</h3>", unsafe_allow_html=True)
 
-st.markdown("Please complete the following questions to assess your organization's AI readiness.")
+st.title("🧠 AI Readiness Assessment")
+st.write("Answer a few quick questions to see how ready your organization is to scale AI.")
 
-with st.form("readiness_form"):
-    # DATA FOUNDATIONS
-    has_data_catalog = st.checkbox("We use a data catalog")
-    quality_automation = st.checkbox("We have data quality automation")
-    integrated_sources = st.checkbox("Our data is integrated across systems")
-    no_data_silos = st.checkbox("We do not have data silos")
+form = st.form("readiness_form")
 
-    # AI INFRASTRUCTURE
-    model_registry = st.checkbox("We use a model registry")
-    pipeline_orchestration = st.checkbox("We use ML pipeline orchestration")
-    cloud_platforms = st.checkbox("We use cloud platforms for AI/ML")
-    real_time_deployment = st.checkbox("We support real-time AI deployments")
+with form:
+    company = st.text_input("Company Name")
 
-    # USE CASE MATURITY
-    live_models = st.slider("How many AI models are currently in production?", 0, 10, 0)
-    pocs = st.slider("How many AI/ML proof-of-concepts (PoCs) have you run?", 0, 10, 0)
-    roi_tracking = st.checkbox("We track ROI on AI initiatives")
-    user_adoption = st.checkbox("Our users regularly interact with AI tools")
+    st.subheader("📊 Data Foundations")
+    has_data_catalog = st.checkbox("Do you have a data catalog?")
+    quality_automation = st.checkbox("Do you use automated data quality checks?")
+    integrated_sources = st.checkbox("Are your data sources integrated?")
+    no_data_silos = st.checkbox("Is your data free from silos?")
 
-    # GOVERNANCE / SECURITY
-    rbac = st.checkbox("We use role-based access control (RBAC)")
-    audit_logs = st.checkbox("We maintain audit logs for AI usage")
-    model_explainability = st.checkbox("Our models are explainable")
-    bias_checks = st.checkbox("We check AI systems for bias")
+    st.subheader("⚙️ AI Infrastructure")
+    model_registry = st.checkbox("Do you use a model registry?")
+    pipeline_orchestration = st.checkbox("Do you orchestrate pipelines (e.g., Airflow, Workflows)?")
+    cloud_platforms = st.checkbox("Do you use cloud platforms (e.g., AWS, GCP, Azure)?")
+    real_time_deployment = st.checkbox("Do you deploy AI in real-time systems?")
 
-    # ORG CULTURE
-    exec_support = st.checkbox("We have strong executive support for AI")
-    cross_functional_teams = st.checkbox("We have cross-functional AI teams")
-    training_programs = st.checkbox("We provide AI training programs")
-    ai_champion = st.checkbox("We have an internal AI champion or leader")
+    st.subheader("🚀 Use Case Maturity")
+    live_models = st.slider("How many live AI models do you currently use?", 0, 10, 1)
+    pocs = st.slider("How many AI/automation PoCs have you completed?", 0, 10, 1)
+    roi_tracking = st.checkbox("Do you track ROI for AI initiatives?")
+    user_adoption = st.checkbox("Is AI actively used by business users?")
+
+    st.subheader("🔐 Governance & Security")
+    rbac = st.checkbox("Do you use role-based access controls?")
+    audit_logs = st.checkbox("Are system or data access logs maintained?")
+    model_explainability = st.checkbox("Do you ensure model explainability (e.g., SHAP, LIME)?")
+    bias_checks = st.checkbox("Do you perform bias/fairness audits?")
+
+    st.subheader("🏢 Organizational Culture")
+    exec_support = st.checkbox("Do your executives support AI initiatives?")
+    cross_functional_teams = st.checkbox("Are AI efforts cross-functional?")
+    training_programs = st.checkbox("Do you have AI/data training for teams?")
+    ai_champion = st.checkbox("Is there an internal AI 'champion' or lead?")
 
     submitted = st.form_submit_button("Run Assessment")
 
 if submitted:
-    st.info("Submitting assessment to Lambda...")
+    with st.spinner("Running assessment..."):
+        client_id = str(uuid.uuid4())
+        timestamp = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S")
 
-    api_url = st.secrets["api_url"]  # should be set in .streamlit/secrets.toml
+        payload = {
+            "client_id": client_id,
+            "company": company,
+            "timestamp": timestamp,
+            "has_data_catalog": has_data_catalog,
+            "quality_automation": quality_automation,
+            "integrated_sources": integrated_sources,
+            "no_data_silos": no_data_silos,
+            "model_registry": model_registry,
+            "pipeline_orchestration": pipeline_orchestration,
+            "cloud_platforms": cloud_platforms,
+            "real_time_deployment": real_time_deployment,
+            "live_models": live_models,
+            "pocs": pocs,
+            "roi_tracking": roi_tracking,
+            "user_adoption": user_adoption,
+            "rbac": rbac,
+            "audit_logs": audit_logs,
+            "model_explainability": model_explainability,
+            "bias_checks": bias_checks,
+            "exec_support": exec_support,
+            "cross_functional_teams": cross_functional_teams,
+            "training_programs": training_programs,
+            "ai_champion": ai_champion
+        }
 
-    payload = {
-        "has_data_catalog": has_data_catalog,
-        "quality_automation": quality_automation,
-        "integrated_sources": integrated_sources,
-        "no_data_silos": no_data_silos,
-        "model_registry": model_registry,
-        "pipeline_orchestration": pipeline_orchestration,
-        "cloud_platforms": cloud_platforms,
-        "real_time_deployment": real_time_deployment,
-        "live_models": live_models,
-        "pocs": pocs,
-        "roi_tracking": roi_tracking,
-        "user_adoption": user_adoption,
-        "rbac": rbac,
-        "audit_logs": audit_logs,
-        "model_explainability": model_explainability,
-        "bias_checks": bias_checks,
-        "exec_support": exec_support,
-        "cross_functional_teams": cross_functional_teams,
-        "training_programs": training_programs,
-        "ai_champion": ai_champion,
-        "timestamp": datetime.utcnow().isoformat()
-    }
+        try:
+            api_url = st.secrets["api_url"]
+            response = requests.post(api_url, json=payload)
 
-    try:
-        response = requests.post(api_url, json=payload)
-        response.raise_for_status()
-        result = response.json()
+            if response.status_code == 200:
+                result = response.json()
+                st.success("Assessment Complete!")
 
-        st.success("Assessment Complete!")
+                st.markdown("### 📈 Readiness Score Breakdown:")
+                for k, v in result["scores"].items():
+                    st.write(f"**{k.replace('_', ' ').title()}**: {v}/20")
 
-        scores = result.get("scores", {})
-        commentary = result.get("commentary", {})
+                st.markdown(f"**✅ Total Score:** {sum(result['scores'].values())}/100")
 
-        st.markdown("### 📊 Readiness Score Breakdown:")
+                st.markdown("### 🧠 AI Readiness Commentary:")
+                for section, comment in result["commentary"].items():
+                    st.markdown(f"**{section.replace('_', ' ').title()}**: {comment}")
 
-        def show_score(label, key):
-            st.markdown(f"**{label}: {scores.get(key, 0)}/20**")
-            st.caption(commentary.get(key, ""))
+            else:
+                st.error("Failed to get a valid response. Please check your Lambda API or try again later.")
 
-        show_score("Data Foundations", "data_foundations")
-        show_score("Ai Infrastructure", "ai_infrastructure")
-        show_score("Use Case Maturity", "use_case_maturity")
-        show_score("Governance Security", "governance_security")
-        show_score("Org Culture", "org_culture")
-
-        total = sum(scores.values())
-        st.markdown(f"✅ **Total Score: {total}/100**")
-
-    except Exception as e:
-        st.error(f"Something went wrong: {e}")
+        except Exception as e:
+            st.error(f"Error: {e}")
