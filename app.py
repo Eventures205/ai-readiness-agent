@@ -85,16 +85,23 @@ if submitted:
         }
 
         try:
-            response = requests.post(api_url, json=payload)
-
+            response = requests.post(api_url, json={"body": json.dumps(payload)})
             if response.status_code == 200:
                 result = response.json()
+                scores = result.get("scores", {})
+                commentary = result.get("commentary", {})
+                
                 st.success("Assessment Complete!")
-                st.markdown("### 📈 Readiness Score Breakdown:")
-                for k, v in result.items():
-                    st.write(f"**{k.replace('_', ' ').title()}**: {v}/20")
-                st.markdown(f"**✅ Total Score:** {sum(result.values())}/100")
+                st.markdown("### 📊 Readiness Score Breakdown:")
+
+                for section, score in scores.items():
+                    label = section.replace("_", " ").title()
+                    st.write(f"**{label}: {score}/20**")
+                    st.caption(commentary.get(section, ""))
+
+                st.markdown(f"**✅ Total Score:** {sum(scores.values())}/100")
             else:
                 st.error("Failed to get a valid response. Please check your configuration or try again later.")
         except Exception as e:
             st.error(f"Something went wrong: {e}")
+
