@@ -56,34 +56,36 @@ if submitted:
 
         # Group all inputs into one dictionary
         inputs = {
-            "has_data_catalog": has_data_catalog,
-            "quality_automation": quality_automation,
-            "integrated_sources": integrated_sources,
-            "no_data_silos": no_data_silos,
-            "model_registry": model_registry,
-            "pipeline_orchestration": pipeline_orchestration,
-            "cloud_platforms": cloud_platforms,
-            "real_time_deployment": real_time_deployment,
-            "live_models": live_models,
-            "pocs": pocs,
-            "roi_tracking": roi_tracking,
-            "user_adoption": user_adoption,
-            "rbac": rbac,
-            "audit_logs": audit_logs,
-            "model_explainability": model_explainability,
-            "bias_checks": bias_checks,
-            "exec_support": exec_support,
-            "cross_functional_teams": cross_functional_teams,
-            "training_programs": training_programs,
-            "ai_champion": ai_champion
-        }
+        "company_name": company,  # ✅ Add company name inside inputs too
+        "has_data_catalog": has_data_catalog,
+        "quality_automation": quality_automation,
+        "integrated_sources": integrated_sources,
+        "no_data_silos": no_data_silos,
+        "model_registry": model_registry,
+        "pipeline_orchestration": pipeline_orchestration,
+        "cloud_platforms": cloud_platforms,
+        "real_time_deployment": real_time_deployment,
+        "live_models": live_models,
+        "pocs": pocs,
+        "roi_tracking": roi_tracking,
+        "user_adoption": user_adoption,
+        "rbac": rbac,
+        "audit_logs": audit_logs,
+        "model_explainability": model_explainability,
+        "bias_checks": bias_checks,
+        "exec_support": exec_support,
+        "cross_functional_teams": cross_functional_teams,
+        "training_programs": training_programs,
+        "ai_champion": ai_champion
+}
 
-        payload = {
-            "company_name": company,
-            "client_id": client_id,  # This is the FIX
-            "timestamp": timestamp,
-            "inputs": inputs
-        }
+payload = {
+    "company_name": company,
+    "client_id": client_id,
+    "timestamp": timestamp,
+    "inputs": inputs  # ✅ now includes company_name inside
+}
+
 
         try:
             api_url = st.secrets["api_url"]
