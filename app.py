@@ -4,15 +4,23 @@ import json
 import uuid
 from datetime import datetime
 
+# Set page layout and title
 st.set_page_config(page_title="AI Readiness Assessment", layout="centered")
 
-st.image("streamlit_logo_large.png", width=300)
-st.markdown("<h3 style='text-align: center;'>Capital E Ventures</h3>", unsafe_allow_html=True)
-st.markdown("<div style='text-align: center;'><img src='streamlit_logo_large.png' width='300'></div>", unsafe_allow_html=True)
+# Display centered logo
+st.markdown(
+    "<div style='text-align: center;'><img src='streamlit_logo_large.png' width='300'></div>",
+    unsafe_allow_html=True
+)
 
+# Company branding
+st.markdown("<h3 style='text-align: center;'>Capital E Ventures</h3>", unsafe_allow_html=True)
+
+# App title and intro
 st.title("🧠 AI Readiness Assessment")
 st.write("Answer a few quick questions to see how ready your organization is to scale AI.")
 
+# Form section
 form = st.form("readiness_form")
 
 with form:
@@ -50,12 +58,13 @@ with form:
 
     submitted = st.form_submit_button("Run Assessment")
 
+# Handle form submission
 if submitted:
     with st.spinner("Running assessment..."):
         client_id = str(uuid.uuid4())
         timestamp = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S")
 
-        # ✅ FIX: Add company_name to inputs as well as top-level
+        # Prepare inputs as a dictionary
         inputs = {
             "company_name": company,
             "has_data_catalog": has_data_catalog,
@@ -80,6 +89,7 @@ if submitted:
             "ai_champion": ai_champion
         }
 
+        # Payload with correct ordering: company_name must be top-level
         payload = {
             "company_name": company,
             "client_id": client_id,
