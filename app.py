@@ -79,8 +79,8 @@ if submitted:
         }
 
         payload = {
-            "client_id": client_id,
-            "company_name": company,  # This is the FIX
+            "company_name": company,
+            "client_id": client_id,  # This is the FIX
             "timestamp": timestamp,
             "inputs": inputs
         }
